@@ -3,6 +3,8 @@ import {UserComponent} from './user.component';
 import {ChildComponent} from './child.component';
 import {CommentsComponent} from './comments.component';
 import { NgComponent } from './ng.component';
+import { RouterOutlet } from '@angular/router';
+import { FormGroup, FormsModule, ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -84,8 +86,35 @@ import { NgComponent } from './ng.component';
       }
     </div>
     <span><app-NG/></span>
+    <nav>
+      <a href="/">Home</a>
+      |
+      <a href="/user">User</a>
+    </nav>
+    <router-outlet />
+
+    <p>Framework: {{ favoriteFramework }}</p>
+    <label for="framework">
+      Favorite Framework:
+      <input id="framework" type="text" [(ngModel)]="favoriteFramework" />
+    </label>
+
+    <button (click)="showFramework()">Show Framework</button>
+    <br>
+    <br>
+
+    <form [formGroup]="profileForm">
+      <input type="text" formControlName="name" name="name" />
+      <input type="email" formControlName="email" name="email" />
+      <button type="submit" [disabled]="!profileForm.valid">Submit</button>
+    </form>
+
+    <h2>Profile Form</h2>
+    <p>Name: {{ profileForm.value.name }}</p>
+    <p>Email: {{ profileForm.value.email }}</p>
+
   `,
-  imports: [UserComponent, ChildComponent, CommentsComponent,NgComponent],
+  imports: [UserComponent, ChildComponent, CommentsComponent,NgComponent, RouterOutlet, FormsModule, ReactiveFormsModule],
 })
 export class AppComponent {
 isUserLogin= true;
@@ -106,5 +135,19 @@ addItem(item: string) {
 
 onMouseOver() {
   this.message = 'Way to go 🚀';
+}
+
+favoriteFramework = '';
+showFramework() {
+  alert(this.favoriteFramework);
+}
+
+profileForm = new FormGroup({
+  name: new FormControl('', Validators.required),
+  email: new FormControl('', [Validators.required, Validators.email]),
+});
+
+handleSubmit() {
+  alert(this.profileForm.value.name + ' | ' + this.profileForm.value.email);
 }
 }
