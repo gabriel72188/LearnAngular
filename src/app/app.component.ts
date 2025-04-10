@@ -39,5 +39,3 @@ onMouseOver() {
   this.message = 'Way to go 🚀';
 }
 }
-
-
